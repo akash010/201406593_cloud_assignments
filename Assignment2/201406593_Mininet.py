@@ -9,9 +9,15 @@ import sys
 
 def emptyNet():
 
+    ## Taking hosts and number of switches as arguments.
+    ## Total number of hosts = hosts * switches
+
     hosts = int(sys.argv[1])
     numSch = int( sys.argv[2])
     
+    ## Making mininet object. TCLink is used in which bandwidth parameter is 
+    ## used to specify bandwidth respectively for even and odd hosts
+
     net = Mininet( controller=Controller ,  link=TCLink)
 
     info( '*** Adding controller\n' )
@@ -22,25 +28,26 @@ def emptyNet():
     switches = []
     cnt=1    
 
+    # Defining subnet networks
     ip1='10.0.1.'
     ip2='10.0.2.'
 
     for i in range(numSch):
-    s = net.addSwitch('s'+str(i+1)) 
+    s = net.addSwitch('s'+str(i+1))  ## Adding Switches
         for j in range(hosts):            
         ind=cnt
         cnt= cnt+1
         if ind % 2 !=0:
-                h = net.addHost( 'h'+str(cnt), ip=ip1+str(ind)+'/24')
-                net.addLink( h, s, bw=1 )
+                h = net.addHost( 'h'+str(cnt), ip=ip1+str(ind)+'/24')   ## Adding Odd host to 10.0.1.0 subnet
+                net.addLink( h, s, bw=1 )                               ## Adding links between switch and hosts
         else:
-                h = net.addHost( 'h'+str(cnt), ip=ip2+str(ind)+'/24')
+                h = net.addHost( 'h'+str(cnt), ip=ip2+str(ind)+'/24')   ## Adding Even host to 10.0.2.0 subnet
                 net.addLink( h, s , bw=2 )
         switches.append(s)
 
     for i in range(numSch):
     if i < numSch-1:
-            net.addLink(switches[i], switches[i+1], bw=2)
+            net.addLink(switches[i], switches[i+1], bw=2)   ## Adding links between switches
 
     info( '*** Starting network\n')
     net.start()

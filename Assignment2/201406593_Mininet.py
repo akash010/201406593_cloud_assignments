@@ -1,10 +1,5 @@
 #!/usr/bin/python
 
-"""
-This example shows how to create an empty Mininet object
-(without a topology object) and add nodes to it manually.
-"""
-
 from mininet.net import Mininet
 from mininet.node import Controller
 from mininet.cli import CLI
@@ -14,7 +9,6 @@ import sys
 
 def emptyNet():
 
-    "Create an empty network and add nodes to it."
     hosts = int(sys.argv[1])
     numSch = int( sys.argv[2])
     
